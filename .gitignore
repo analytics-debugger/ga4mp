@@ -55,7 +55,6 @@ typings/
 # dotenv environment variables file
 .env
 
-docs/
 package-lock.json
 yarn.lock
 index.html
