@@ -1,0 +1,49 @@
+{
+  "name": "ga4mp",
+  "version": "0.0.1-alpha.0",
+  "main": "dist/ga4mp.cjs.js",
+  "module": "dist/ga4mp.esm.js",
+  "umd:main": "dist/ga4mp.umd.min.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/preset-env": "^7.20.2",
+    "@preconstruct/cli": "^2.2.2",
+    "eslint": "^8.26.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.7.1"
+  },
+  "scripts": {
+    "build": "preconstruct build",
+    "postinstall": "preconstruct dev",
+    "watch": "preconstruct watch",
+    "lint": "eslint ./src",
+    "lint-fix": "eslint ./src --fix",
+    "format": "npx prettier --write ./src",
+    "fix": "preconstruct fix",
+    "prepublish:alpha": "npm version prerelease --preid=alpha && npm run build",
+    "prepublish:beta": "npm version prerelease --preid=beta && npm run build",
+    "prepublish:patch": "npm version patch --force && npm run build",
+    "prepublish:minor": "npm version minor --force && npm run build",
+    "prepublish:major": "npm version major --force && npm run build",
+    "publish:public": "npm publish --access public"
+  },
+  "preconstruct": {
+    "entrypoints": [
+      "index.{js,jsx,ts,tsx}"
+    ],
+    "packages": [
+      "."
+    ],
+    "globals": {},
+    "exports": "default",
+    "umdName": "ga4mp"
+  },
+  "dependencies": {
+    "@analytics-debugger/google-tag-linker": "^0.0.1",
+    "i": "^0.3.7",
+    "is-string": "^1.0.7",
+    "node-fetch": "^3.2.10",
+    "npm": "^8.19.3"
+  }
+}
