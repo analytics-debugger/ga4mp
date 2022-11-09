@@ -13,7 +13,7 @@ const ga4track = ga4mp(["G-THYNGSTER"], {
 ```
 #### **Browser**
 ```javascript
-<script src="https://cdn.analytics-debugger.com/ga4mp.js"
+<script src="https://cdn.jsdelivr.net/npm/@analytics-debugger/ga4mp@latest/dist/ga4mp.umd.min.js"
 const ga4track = ga4mp(["G-THYNGSTER"], {  
   user_id: undefined,
   non_personalized_ads: true,
