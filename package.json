@@ -1,49 +1,66 @@
 {
-  "name": "ga4mp",
+  "name": "@analytics-debugger/ga4mp",
   "version": "0.0.1-alpha.1",
-  "main": "dist/ga4mp.cjs.js",
-  "module": "dist/ga4mp.esm.js",
-  "umd:main": "dist/ga4mp.umd.min.js",
-  "license": "MIT",
+  "description": "An Open-Source Google Analytics 4 Client-Side Protocol Implementation",
+  "main": "dist/ga4mp.min.js",
+  "module": "dist/dist/ga4mp.esm.min.js",
+  "browser": "dist/ga4mp.min.js",
   "devDependencies": {
-    "@babel/preset-env": "^7.20.2",
-    "@preconstruct/cli": "^2.2.2",
-    "eslint": "^8.26.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.7.1"
+    "jest": "^26.6.3"
   },
   "scripts": {
-    "build": "preconstruct build",
-    "postinstall": "preconstruct dev",
-    "watch": "preconstruct watch",
-    "lint": "eslint ./src",
-    "lint-fix": "eslint ./src --fix",
-    "format": "npx prettier --write ./src",
-    "fix": "preconstruct fix",
+    "build": "rollup -c",
+    "dev": "rollup -c --watch",
+    "test": "jest",
+    "devtest": "jest --watch",
     "prepublish:alpha": "npm version prerelease --preid=alpha && npm run build",
-    "prepublish:beta": "npm version prerelease --preid=beta && npm run build",
+    "prepublish:beta": "npm version prerelease --preid=beta && npm run build",    
     "prepublish:patch": "npm version patch --force && npm run build",
     "prepublish:minor": "npm version minor --force && npm run build",
     "prepublish:major": "npm version major --force && npm run build",
     "publish:public": "npm publish --access public"
   },
-  "preconstruct": {
-    "entrypoints": [
-      "index.{js,jsx,ts,tsx}"
-    ],
-    "packages": [
-      "."
-    ],
-    "globals": {},
-    "exports": "default",
-    "umdName": "ga4mp"
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/analytics-debugger/ga4mp"
+  },
+  "keywords": [
+    "google",
+    "google tag",
+    "gtag",
+    "ga4",
+    "google analytics 4",
+    "server side",
+    "ga4",
+    "analytics",
+    "measurement protocol"    
+  ],
+  "author": {
+    "name": "David Vallejo ",
+    "email": "thyngster@gmail.com",
+    "url": "https://www.thyngster.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/analytics-debugger/ga4mp/issues"
+  },
+  "homepage": "https://www.thyngster.com",
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/sponsors/thyngster"
   },
   "dependencies": {
-    "@analytics-debugger/google-tag-linker": "^0.0.1",
-    "i": "^0.3.7",
-    "is-string": "^1.0.7",
-    "node-fetch": "^3.2.10",
-    "npm": "^8.19.3"
+    "@babel/core": "^7.19.6",
+    "@babel/plugin-transform-object-assign": "^7.18.6",
+    "@babel/preset-env": "^7.19.4",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "browser-or-node": "^2.0.0",
+    "rollup": "^2.79.1",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-license": "^3.0.1",
+    "rollup-plugin-terser": "^7.0.2"
   }
 }
