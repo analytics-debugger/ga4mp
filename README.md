@@ -17,6 +17,7 @@ Main differences with the official offerser server-side protocol are:
 If we compare this library with the official GTAG implementation.
 
  - Lightweight 8.7kb (<4kb compressed ) 95.6% Lighter than a GTAG Container
+![image](https://user-images.githubusercontent.com/1494564/201500771-f54c592b-4f37-4ac1-9a89-87878987cc33.png)
  - Privacy Compliant: Full control over which cookies are created/read and sent to Google
  - Dual Tracking (send hits to multiple measurement Ids)
 
