@@ -4,7 +4,7 @@
 <!-- tabs:start -->
 #### **ES6 Imports**
 ```javascript
-import ga4mp from 'analytics-debugger/ga4mp-tracking-library'
+import ga4mp from '@analytics-debugger/ga4mp'
 const ga4track = ga4mp(["G-THYNGSTER"], {  
   user_id: undefined,
   non_personalized_ads: true,
@@ -22,7 +22,7 @@ const ga4track = ga4mp(["G-THYNGSTER"], {
 ```
 #### **NODE.JS**
 ```javascript
-const ga4mp = require('./dist/ga4mp.cjs.prod').default
+const ga4mp = require('./dist/ga4mp').default
 const ga4track = ga4mp(["G-THYNGSTER"], {  
   user_id: undefined,
   non_personalized_ads: true,

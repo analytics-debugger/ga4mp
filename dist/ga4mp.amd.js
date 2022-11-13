@@ -1,6 +1,6 @@
 /*!
 * 
-*   @analytics-debugger/ga4mp 0.0.1-alpha.1
+*   @analytics-debugger/ga4mp 0.0.1-alpha.2
 *   https://github.com/analytics-debugger/ga4mp
 *
 *   Copyright (c) David Vallejo (https://www.thyngster.com).
@@ -236,7 +236,7 @@ define((function () { 'use strict';
     };
   };
 
-  var version = '0.0.1-alpha.1';
+  var version = '0.0.1-alpha.2';
 
   /**
    * Main Class Function

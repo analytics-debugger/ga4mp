@@ -1,6 +1,6 @@
 {
   "name": "@analytics-debugger/ga4mp",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.2",
   "description": "An Open-Source Google Analytics 4 Client-Side Protocol Implementation",
   "main": "dist/ga4mp.min.js",
   "module": "dist/dist/ga4mp.esm.min.js",
@@ -14,7 +14,7 @@
     "test": "jest",
     "devtest": "jest --watch",
     "prepublish:alpha": "npm version prerelease --preid=alpha && npm run build",
-    "prepublish:beta": "npm version prerelease --preid=beta && npm run build",    
+    "prepublish:beta": "npm version prerelease --preid=beta && npm run build",
     "prepublish:patch": "npm version patch --force && npm run build",
     "prepublish:minor": "npm version minor --force && npm run build",
     "prepublish:major": "npm version major --force && npm run build",
@@ -36,7 +36,7 @@
     "server side",
     "ga4",
     "analytics",
-    "measurement protocol"    
+    "measurement protocol"
   ],
   "author": {
     "name": "David Vallejo ",
@@ -57,7 +57,6 @@
     "@babel/plugin-transform-object-assign": "^7.18.6",
     "@babel/preset-env": "^7.19.4",
     "@rollup/plugin-node-resolve": "^15.0.1",
-    "browser-or-node": "^2.0.0",
     "rollup": "^2.79.1",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-license": "^3.0.1",
