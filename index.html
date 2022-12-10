@@ -3,9 +3,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     
-    <script src="https://cdn.jsdelivr.net/npm/@analytics-debugger/ga4mp@latest/dist/ga4mp.umd.min.js"></script>
+    <script src="dist/ga4mp.umd.min.js"></script>
     <script>
-        window.ga4track = ga4mp(["G-4BD9HSJLCJ"], {        
+        window.ga4track = ga4mp(["G-THYNGSTER"], {        
         user_id: '',  
         non_personalized_ads: true,
         endpoint: 'https://region1.google-analytics.com/g/collect',
@@ -50,6 +50,14 @@
         ga4track.trackEvent('page_view', {})
       }
 
+      function sendPageview_custom () {
+        ga4track.trackEvent('page_view', {
+        page_location: 'https://www.google.es'
+})  
+      }
+
+
+
       function sendPageview_2 () {
         ga4track.trackEvent('page_view', { 
           is_session_start: true, 
@@ -78,7 +86,7 @@
 
 <body class="p-5">
   <p>&nbsp;</p>
-  <h1 class="text-xl my-5">GA4MP Library 0.0.1-alpha.0 [2022-11-09] ( David Vallejo @thyng )</h1>
+  <h1 class="text-xl my-5">GA4MP Library 0.0.1-alpha.3 [2022-11-13] ( David Vallejo @thyng )</h1>
 <h2 class="my-2"><a href="https://ga4mp.dev">Official Website :: https://ga4mp.dev</a></h2>
   <hr>
   <h2 class="text-xl mt-3">Initializing the tracker</h2>
@@ -125,7 +133,7 @@
     is_session_start: true, 
     is_first_visit: true,            
 })                </pre>
-    <button class="mt-2 px-2 border bg-yellow-300 border-black rounded" onclick="sendPageview_2()">SEND PAGE_VIEW ( FIRST VISIT, SESSION START</button>
+    <button class="mt-2 px-2 border bg-yellow-300 border-black rounded" onclick="sendPageview()">SEND PAGE_VIEW ( FIRST VISIT, SESSION START</button>
 
   </div>
   <h2 class="text-xl mt-3">Send a pageview that trigger a new session and set the campaign attribution</h2>
@@ -135,13 +143,19 @@
     campaign_medium: 'cpc',
     campaign_source: 'google',                    
     campaign_name: 'gclid'         
-})      
-</pre>
-    <button class="mt-2 px-2 border bg-yellow-300 border-black rounded" onclick="sendPageview_3()">SEND PAGE_VIEW ( SESSION START; ATTRIBUTION DATA</button>
+})      </pre>
+    <button class="mt-2 px-2 border bg-yellow-300 border-black rounded" onclick="sendPageview()">SEND PAGE_VIEW ( SESSION START; ATTRIBUTION DATA</button>
 
   </div>
 
+  <h2 class="text-xl mt-3">Virtual PageView</h2>
+  <div class="bg-slate-200 p-2 rounded">
+    <pre class="font-mono">ga4track.trackEvent('page_view', {
+        page_location: 'https://www.google.es'
+})      </pre>
+    <button class="mt-2 px-2 border bg-yellow-300 border-black rounded" onclick="sendPageview_custom()">SEND Virtual</button>
 
+  </div>
   <h2 class="text-xl mt-3">Sending Ecommerce</h2>
 
   

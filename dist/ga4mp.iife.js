@@ -1,6 +1,6 @@
 /*!
 * 
-*   @analytics-debugger/ga4mp 0.0.1-alpha.2
+*   @analytics-debugger/ga4mp 0.0.1
 *   https://github.com/analytics-debugger/ga4mp
 *
 *   Copyright (c) David Vallejo (https://www.thyngster.com).
@@ -237,7 +237,7 @@ var ga4mp = (function () {
     };
   };
 
-  var version = '0.0.1-alpha.2';
+  var version = '0.0.1-alpha.3';
 
   /**
    * Main Class Function
@@ -361,6 +361,7 @@ var ga4mp = (function () {
      * @param {object} customEventParameters
      */
     var buildPayload = function buildPayload(eventName, customEventParameters) {
+      console.log("DAVID", eventName, customEventParameters);
       var payload = {};
       if (internalModel.payloadData.hit_count === 1) internalModel.payloadData.session_engaged = 1;
       Object.entries(internalModel.payloadData).forEach(function (pair) {
