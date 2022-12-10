@@ -13,7 +13,7 @@ import { sendRequest } from './modules/request'
 import clientHints from './modules/clientHints'
 import pageDetails from './modules/pageInfo'
 
-const version = '0.0.1-alpha.2'
+const version = '0.0.1-alpha.3'
 
 /**
  * Main Class Function
@@ -160,6 +160,7 @@ const ga4mp = function (measurement_ids, config = {}) {
      * @param {object} customEventParameters
      */
     const buildPayload = (eventName, customEventParameters) => {
+        console.log("DAVID",eventName,  customEventParameters)
         const payload = {}
         if (internalModel.payloadData.hit_count === 1)
             internalModel.payloadData.session_engaged = 1
