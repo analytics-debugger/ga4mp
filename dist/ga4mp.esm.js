@@ -164,6 +164,7 @@ const ecommerceEvents = [
 ];
 
 const sendRequest = (endpoint, payload, mode = 'browser', opts = {}) => {
+    console.log("DATA",payload );
     const qs = new URLSearchParams(
         JSON.parse(JSON.stringify(payload))
     ).toString();
@@ -177,7 +178,7 @@ const sendRequest = (endpoint, payload, mode = 'browser', opts = {}) => {
                 'User-Agent': opts.user_agent 
             },
             timeout: 1,
-        };
+        };        
         const request = req
             .get([endpoint, qs].join('?'), options, (resp) => {
                 resp.on('data', (chunk) => {
@@ -212,19 +213,19 @@ const clientHints = () => {
             'wow64',
         ])
         .then((d) => {
-            return {
+            return {                
                 _user_agent_architecture: d.architecture,
                 _user_agent_bitness: d.bitness,
                 _user_agent_full_version_list: encodeURIComponent(
-                    d.fullVersionList
+                    d.fullVersionList || navigator?.userAgentData?.brands
                         .map((h) => {
                             return [h.brand, h.version].join(';')
                         })
                         .join('|')
                 ),
                 _user_agent_mobile: d.mobile ? 1 : 0,
-                _user_agent_model: d.model,
-                _user_agent_platform: d.platform,
+                _user_agent_model: d.model || navigator?.userAgentData?.mobile,
+                _user_agent_platform: d.platform || navigator?.userAgentData?.platform,
                 _user_agent_platform_version: d.platformVersion,
                 _user_agent_wow64: d.wow64 ? 1 : 0,
             }
@@ -330,14 +331,6 @@ const ga4mp = function (measurement_ids, config = {}) {
                 pageData
             );
         }
-        clientHints().then((ch) => {
-            if (ch) {
-                internalModel.payloadData = Object.assign(
-                    internalModel.payloadData,
-                    ch
-                );
-            }
-        });
     }
     /**
      * Dispatching Queue
@@ -397,7 +390,6 @@ const ga4mp = function (measurement_ids, config = {}) {
      * @param {object} customEventParameters
      */
     const buildPayload = (eventName, customEventParameters) => {
-        console.log("DAVID",eventName,  customEventParameters);
         const payload = {};
         if (internalModel.payloadData.hit_count === 1)
             internalModel.payloadData.session_engaged = 1;
@@ -504,23 +496,31 @@ const ga4mp = function (measurement_ids, config = {}) {
         sessionControl = {},
         forceDispatch = true
     ) => {
-        const payload = buildPayload(eventName, eventParameters);
-
-        if (payload && forceDispatch) {
-            for (let i = 0; i < payload.tid.length; i++) {
-                let r = JSON.parse(JSON.stringify(payload));
-                r.tid = payload.tid[i];
-                sendRequest(internalModel.endpoint, r, internalModel.mode, {
-                    user_agent: internalModel?.user_agent,
-                });
+        // We want to wait for the CH Promise to fullfill
+        clientHints().then((ch) => {            
+            if (ch) {                
+                internalModel.payloadData = Object.assign(
+                    internalModel.payloadData,
+                    ch
+                );                
             }
-            internalModel.payloadData.hit_count++;
-        } else {
-            const eventsCount = internalModel.queue.push(event);
-            if (eventsCount >= internalModel.queueDispatchMaxEvents) {
-                dispatchQueue();
-            }
-        }
+            const payload = buildPayload(eventName, eventParameters);
+            if (payload && forceDispatch) {
+                for (let i = 0; i < payload.tid.length; i++) {
+                    let r = JSON.parse(JSON.stringify(payload));
+                    r.tid = payload.tid[i];               
+                    sendRequest(internalModel.endpoint, r, internalModel.mode, {
+                        user_agent: internalModel?.user_agent,
+                    });
+                }
+                internalModel.payloadData.hit_count++;
+            } else {
+                const eventsCount = internalModel.queue.push(event);
+                if (eventsCount >= internalModel.queueDispatchMaxEvents) {
+                    dispatchQueue();
+                }
+            }            
+        });             
     };
     return {
         version: internalModel.version,

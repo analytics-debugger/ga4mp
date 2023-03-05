@@ -93,14 +93,6 @@ const ga4mp = function (measurement_ids, config = {}) {
                 pageData
             )
         }
-        clientHints().then((ch) => {
-            if (ch) {
-                internalModel.payloadData = Object.assign(
-                    internalModel.payloadData,
-                    ch
-                )
-            }
-        })
     }
     /**
      * Dispatching Queue
@@ -160,7 +152,6 @@ const ga4mp = function (measurement_ids, config = {}) {
      * @param {object} customEventParameters
      */
     const buildPayload = (eventName, customEventParameters) => {
-        console.log("DAVID",eventName,  customEventParameters)
         const payload = {}
         if (internalModel.payloadData.hit_count === 1)
             internalModel.payloadData.session_engaged = 1
@@ -267,23 +258,31 @@ const ga4mp = function (measurement_ids, config = {}) {
         sessionControl = {},
         forceDispatch = true
     ) => {
-        const payload = buildPayload(eventName, eventParameters, sessionControl)
-
-        if (payload && forceDispatch) {
-            for (let i = 0; i < payload.tid.length; i++) {
-                let r = JSON.parse(JSON.stringify(payload))
-                r.tid = payload.tid[i]
-                sendRequest(internalModel.endpoint, r, internalModel.mode, {
-                    user_agent: internalModel?.user_agent,
-                })
+        // We want to wait for the CH Promise to fullfill
+        clientHints().then((ch) => {            
+            if (ch) {                
+                internalModel.payloadData = Object.assign(
+                    internalModel.payloadData,
+                    ch
+                )                
             }
-            internalModel.payloadData.hit_count++
-        } else {
-            const eventsCount = internalModel.queue.push(event)
-            if (eventsCount >= internalModel.queueDispatchMaxEvents) {
-                dispatchQueue()
-            }
-        }
+            const payload = buildPayload(eventName, eventParameters, sessionControl)
+            if (payload && forceDispatch) {
+                for (let i = 0; i < payload.tid.length; i++) {
+                    let r = JSON.parse(JSON.stringify(payload))
+                    r.tid = payload.tid[i]               
+                    sendRequest(internalModel.endpoint, r, internalModel.mode, {
+                        user_agent: internalModel?.user_agent,
+                    })
+                }
+                internalModel.payloadData.hit_count++
+            } else {
+                const eventsCount = internalModel.queue.push(event)
+                if (eventsCount >= internalModel.queueDispatchMaxEvents) {
+                    dispatchQueue()
+                }
+            }            
+        })             
     }
     return {
         version: internalModel.version,

@@ -86,7 +86,7 @@
 
 <body class="p-5">
   <p>&nbsp;</p>
-  <h1 class="text-xl my-5">GA4MP Library 0.0.1-alpha.3 [2022-11-13] ( David Vallejo @thyng )</h1>
+  <h1 class="text-xl my-5">GA4MP Library 0.0.2 [2023-03-05] ( David Vallejo @thyng )</h1>
 <h2 class="my-2"><a href="https://ga4mp.dev">Official Website :: https://ga4mp.dev</a></h2>
   <hr>
   <h2 class="text-xl mt-3">Initializing the tracker</h2>
@@ -124,7 +124,7 @@
   <div class="bg-slate-200 p-2 rounded">
     <pre class="font-mono">ga4track.trackEvent('page_view', {})        
     </pre>
-    <button class="mt-2 px-2 border bg-yellow-300 border-black rounded" onclick="sendPageview()">SEND PAGE_VIEW</button>
+    <button class="mt-2 px-2 border bg-yellow-300 border-black rounded" onclick="sendPageview_2()">SEND PAGE_VIEW</button>
 
   </div>
   <h2 class="text-xl mt-3">Send a pageview that trigger a new session and a first visit</h2>
@@ -133,7 +133,7 @@
     is_session_start: true, 
     is_first_visit: true,            
 })                </pre>
-    <button class="mt-2 px-2 border bg-yellow-300 border-black rounded" onclick="sendPageview()">SEND PAGE_VIEW ( FIRST VISIT, SESSION START</button>
+    <button class="mt-2 px-2 border bg-yellow-300 border-black rounded" onclick="sendPageview_3()">SEND PAGE_VIEW ( FIRST VISIT, SESSION START</button>
 
   </div>
   <h2 class="text-xl mt-3">Send a pageview that trigger a new session and set the campaign attribution</h2>

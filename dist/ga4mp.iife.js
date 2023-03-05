@@ -175,6 +175,7 @@ var ga4mp = (function () {
   var sendRequest = function sendRequest(endpoint, payload) {
     var mode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'browser';
     var opts = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+    console.log("DATA", payload);
     var qs = new URLSearchParams(JSON.parse(JSON.stringify(payload))).toString();
     if (mode === 'browser') {
       var _navigator;
@@ -209,15 +210,16 @@ var ga4mp = (function () {
       resolve(null);
     });
     return navigator.userAgentData.getHighEntropyValues(['platform', 'platformVersion', 'architecture', 'model', 'uaFullVersion', 'bitness', 'fullVersionList', 'wow64']).then(function (d) {
+      var _navigator2, _navigator2$userAgent, _navigator3, _navigator3$userAgent, _navigator4, _navigator4$userAgent;
       return {
         _user_agent_architecture: d.architecture,
         _user_agent_bitness: d.bitness,
-        _user_agent_full_version_list: encodeURIComponent(d.fullVersionList.map(function (h) {
+        _user_agent_full_version_list: encodeURIComponent(d.fullVersionList || ((_navigator2 = navigator) === null || _navigator2 === void 0 ? void 0 : (_navigator2$userAgent = _navigator2.userAgentData) === null || _navigator2$userAgent === void 0 ? void 0 : _navigator2$userAgent.brands.map(function (h) {
           return [h.brand, h.version].join(';');
-        }).join('|')),
+        }).join('|'))),
         _user_agent_mobile: d.mobile ? 1 : 0,
-        _user_agent_model: d.model,
-        _user_agent_platform: d.platform,
+        _user_agent_model: d.model || ((_navigator3 = navigator) === null || _navigator3 === void 0 ? void 0 : (_navigator3$userAgent = _navigator3.userAgentData) === null || _navigator3$userAgent === void 0 ? void 0 : _navigator3$userAgent.mobile),
+        _user_agent_platform: d.platform || ((_navigator4 = navigator) === null || _navigator4 === void 0 ? void 0 : (_navigator4$userAgent = _navigator4.userAgentData) === null || _navigator4$userAgent === void 0 ? void 0 : _navigator4$userAgent.platform),
         _user_agent_platform_version: d.platformVersion,
         _user_agent_wow64: d.wow64 ? 1 : 0
       };
@@ -297,11 +299,6 @@ var ga4mp = (function () {
       if (pageData) {
         internalModel.payloadData = _extends(internalModel.payloadData, pageData);
       }
-      clientHints().then(function (ch) {
-        if (ch) {
-          internalModel.payloadData = _extends(internalModel.payloadData, ch);
-        }
-      });
     }
     /**
      * Dispatching Queue
@@ -361,7 +358,6 @@ var ga4mp = (function () {
      * @param {object} customEventParameters
      */
     var buildPayload = function buildPayload(eventName, customEventParameters) {
-      console.log("DAVID", eventName, customEventParameters);
       var payload = {};
       if (internalModel.payloadData.hit_count === 1) internalModel.payloadData.session_engaged = 1;
       Object.entries(internalModel.payloadData).forEach(function (pair) {
@@ -444,22 +440,28 @@ var ga4mp = (function () {
     var trackEvent = function trackEvent(eventName) {
       var eventParameters = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var forceDispatch = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
-      var payload = buildPayload(eventName, eventParameters);
-      if (payload && forceDispatch) {
-        for (var i = 0; i < payload.tid.length; i++) {
-          var r = JSON.parse(JSON.stringify(payload));
-          r.tid = payload.tid[i];
-          sendRequest(internalModel.endpoint, r, internalModel.mode, {
-            user_agent: internalModel === null || internalModel === void 0 ? void 0 : internalModel.user_agent
-          });
+      // We want to wait for the CH Promise to fullfill
+      clientHints().then(function (ch) {
+        if (ch) {
+          internalModel.payloadData = _extends(internalModel.payloadData, ch);
         }
-        internalModel.payloadData.hit_count++;
-      } else {
-        var eventsCount = internalModel.queue.push(event);
-        if (eventsCount >= internalModel.queueDispatchMaxEvents) {
-          dispatchQueue();
+        var payload = buildPayload(eventName, eventParameters);
+        if (payload && forceDispatch) {
+          for (var i = 0; i < payload.tid.length; i++) {
+            var r = JSON.parse(JSON.stringify(payload));
+            r.tid = payload.tid[i];
+            sendRequest(internalModel.endpoint, r, internalModel.mode, {
+              user_agent: internalModel === null || internalModel === void 0 ? void 0 : internalModel.user_agent
+            });
+          }
+          internalModel.payloadData.hit_count++;
+        } else {
+          var eventsCount = internalModel.queue.push(event);
+          if (eventsCount >= internalModel.queueDispatchMaxEvents) {
+            dispatchQueue();
+          }
         }
-      }
+      });
     };
     return {
       version: internalModel.version,

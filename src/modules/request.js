@@ -1,4 +1,5 @@
 export const sendRequest = (endpoint, payload, mode = 'browser', opts = {}) => {
+    console.log("DATA",payload )
     const qs = new URLSearchParams(
         JSON.parse(JSON.stringify(payload))
     ).toString()
@@ -12,7 +13,7 @@ export const sendRequest = (endpoint, payload, mode = 'browser', opts = {}) => {
                 'User-Agent': opts.user_agent 
             },
             timeout: 1,
-        }
+        }        
         const request = req
             .get([endpoint, qs].join('?'), options, (resp) => {
                 let data = ''
