@@ -6,12 +6,12 @@ import {
     randomInt,
     timestampInSeconds,
     sanitizeValue,
-} from './modules/helpers.js'
+} from './modules/helpers'
 
-import { ga4Schema, ecommerceEvents } from './modules/ga4Schema.js'
-import { sendRequest } from './modules/request.js'
-import clientHints from './modules/clientHints.js'
-import pageDetails from './modules/pageInfo.js'
+import { ga4Schema, ecommerceEvents } from './modules/ga4Schema'
+import { sendRequest } from './modules/request'
+import clientHints from './modules/clientHints'
+import pageDetails from './modules/pageInfo'
 
 const version = '0.0.1-alpha.3'
 
@@ -40,8 +40,8 @@ const ga4mp = function (measurement_ids, config = {}) {
             user_agent: `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 [GA4MP/${version}]`,
             user_ip_address: null,
             hooks: {
-                beforeLoad: () => {console.log('before Load!')},
-                beforeRequestSend: () => {console.log('request sent!')},
+                beforeLoad: () => {},
+                beforeRequestSend: () => {},
             },
             eventCallbacks: [],
             endpoint: 'https://www.google-analytics.com/g/collect',
