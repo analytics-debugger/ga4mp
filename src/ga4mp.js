@@ -6,12 +6,12 @@ import {
     randomInt,
     timestampInSeconds,
     sanitizeValue,
-} from './modules/helpers'
+} from './modules/helpers.js'
 
-import { ga4Schema, ecommerceEvents } from './modules/ga4Schema'
-import { sendRequest } from './modules/request'
-import clientHints from './modules/clientHints'
-import pageDetails from './modules/pageInfo'
+import { ga4Schema, ecommerceEvents } from './modules/ga4Schema.js'
+import { sendRequest } from './modules/request.js'
+import clientHints from './modules/clientHints.js'
+import pageDetails from './modules/pageInfo.js'
 
 const version = '0.0.1-alpha.3'
 
@@ -40,9 +40,10 @@ const ga4mp = function (measurement_ids, config = {}) {
             user_agent: `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 [GA4MP/${version}]`,
             user_ip_address: null,
             hooks: {
-                beforeLoad: () => {},
-                beforeRequestSend: () => {},
+                beforeLoad: () => {console.log('before Load!')},
+                beforeRequestSend: () => {console.log('request sent!')},
             },
+            eventCallbacks: [],
             endpoint: 'https://www.google-analytics.com/g/collect',
             payloadData: {},
         },
@@ -134,6 +135,21 @@ const ga4mp = function (measurement_ids, config = {}) {
         value = sanitizeValue(value, 100)
         internalModel['persistentEventParameters'][key] = value
     }
+
+    /**
+     * Add an events callback, it will be triggered for every track function call
+     * @param {function} callback 
+     * @returns
+     */
+    const addEventCallback = (callback) => {
+        if (isFunction(callback)) {
+                internalModel.eventCallbacks.push(callback)
+        } else {
+            console.error('callback is not a function')
+        }
+
+    }
+
 
     /**
      * setUserProperty
@@ -267,6 +283,15 @@ const ga4mp = function (measurement_ids, config = {}) {
                 )                
             }
             const payload = buildPayload(eventName, eventParameters, sessionControl)
+            // run callbacks here
+            for (let index = 0; index < internalModel.eventCallbacks.length; index++) {
+                let callbackFn = internalModel.eventCallbacks[index];
+                try {
+                callbackFn(internalModel.payloadData.user_id, eventName, eventParameters, internalModel.persistentEventParameters, internalModel.userProperties);
+                } catch(e) {
+                    console.error('callback failed: '+e)
+                }
+            }
             if (payload && forceDispatch) {
                 for (let i = 0; i < payload.tid.length; i++) {
                     let r = JSON.parse(JSON.stringify(payload))
@@ -294,6 +319,7 @@ const ga4mp = function (measurement_ids, config = {}) {
         setEventsParameter,
         setUserId,
         trackEvent,
+        addEventCallback,
     }
 }
 
