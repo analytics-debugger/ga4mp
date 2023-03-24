@@ -43,7 +43,7 @@ const ga4mp = function (measurement_ids, config = {}) {
                 beforeLoad: () => {},
                 beforeRequestSend: () => {},
             },
-            eventCallbacks: [],
+            eventCallback: null,
             endpoint: 'https://www.google-analytics.com/g/collect',
             payloadData: {},
         },
@@ -143,7 +143,7 @@ const ga4mp = function (measurement_ids, config = {}) {
      */
     const addEventCallback = (callback) => {
         if (isFunction(callback)) {
-                internalModel.eventCallbacks.push(callback)
+                internalModel.eventCallback = callback
         } else {
             console.error('callback is not a function')
         }
@@ -284,14 +284,16 @@ const ga4mp = function (measurement_ids, config = {}) {
             }
             const payload = buildPayload(eventName, eventParameters, sessionControl)
             // run callbacks here
-            for (let index = 0; index < internalModel.eventCallbacks.length; index++) {
-                let callbackFn = internalModel.eventCallbacks[index];
+            
+                let callbackFn = internalModel.eventCallback;
+                if(callbackFn !== null) {
                 try {
                 callbackFn(internalModel.payloadData.user_id, eventName, eventParameters, internalModel.persistentEventParameters, internalModel.userProperties);
                 } catch(e) {
                     console.error('callback failed: '+e)
                 }
             }
+
             if (payload && forceDispatch) {
                 for (let i = 0; i < payload.tid.length; i++) {
                     let r = JSON.parse(JSON.stringify(payload))
