@@ -1,6 +1,6 @@
 /*!
 * 
-*   @analytics-debugger/ga4mp 0.0.3
+*   @analytics-debugger/ga4mp 0.0.4
 *   https://github.com/analytics-debugger/ga4mp
 *
 *   Copyright (c) David Vallejo (https://www.thyngster.com).
@@ -175,7 +175,6 @@ var ga4mp = (function () {
   var sendRequest = function sendRequest(endpoint, payload) {
     var mode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'browser';
     var opts = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-    console.log("DATA", payload);
     var qs = new URLSearchParams(JSON.parse(JSON.stringify(payload))).toString();
     if (mode === 'browser') {
       var _navigator;
@@ -206,6 +205,11 @@ var ga4mp = (function () {
 
   var clientHints = function clientHints() {
     var _navigator, _navigator$userAgentD;
+    if (window && !('navigator' in window)) {
+      return new Promise(function (resolve) {
+        resolve(null);
+      });
+    }
     if (!((_navigator = navigator) !== null && _navigator !== void 0 && (_navigator$userAgentD = _navigator.userAgentData) !== null && _navigator$userAgentD !== void 0 && _navigator$userAgentD.getHighEntropyValues)) return new Promise(function (resolve) {
       resolve(null);
     });
@@ -214,9 +218,9 @@ var ga4mp = (function () {
       return {
         _user_agent_architecture: d.architecture,
         _user_agent_bitness: d.bitness,
-        _user_agent_full_version_list: encodeURIComponent(d.fullVersionList || ((_navigator2 = navigator) === null || _navigator2 === void 0 ? void 0 : (_navigator2$userAgent = _navigator2.userAgentData) === null || _navigator2$userAgent === void 0 ? void 0 : _navigator2$userAgent.brands.map(function (h) {
+        _user_agent_full_version_list: encodeURIComponent((Object.values(d.fullVersionList) || ((_navigator2 = navigator) === null || _navigator2 === void 0 ? void 0 : (_navigator2$userAgent = _navigator2.userAgentData) === null || _navigator2$userAgent === void 0 ? void 0 : _navigator2$userAgent.brands)).map(function (h) {
           return [h.brand, h.version].join(';');
-        }).join('|'))),
+        }).join('|')),
         _user_agent_mobile: d.mobile ? 1 : 0,
         _user_agent_model: d.model || ((_navigator3 = navigator) === null || _navigator3 === void 0 ? void 0 : (_navigator3$userAgent = _navigator3.userAgentData) === null || _navigator3$userAgent === void 0 ? void 0 : _navigator3$userAgent.mobile),
         _user_agent_platform: d.platform || ((_navigator4 = navigator) === null || _navigator4 === void 0 ? void 0 : (_navigator4$userAgent = _navigator4.userAgentData) === null || _navigator4$userAgent === void 0 ? void 0 : _navigator4$userAgent.platform),
@@ -239,7 +243,7 @@ var ga4mp = (function () {
     };
   };
 
-  var version = '0.0.1-alpha.3';
+  var version = '0.0.4';
 
   /**
    * Main Class Function
@@ -377,27 +381,28 @@ var ga4mp = (function () {
         if (key === 'items' && ecommerceEvents.indexOf(eventName) > -1 && Array.isArray(value)) {
           // only 200 items per event
           var items = value.slice(0, 200);
-          for (var i = 0; i < items.length; i++) {
+          var _loop = function _loop() {
             if (items[i]) {
-              (function () {
-                var item = {
-                  core: {},
-                  custom: {}
-                };
-                Object.entries(items[i]).forEach(function (pair) {
-                  if (ga4Schema[pair[0]]) {
-                    if (typeof pair[1] !== 'undefined') item.core[ga4Schema[pair[0]]] = pair[1];
-                  } else item.custom[pair[0]] = pair[1];
-                });
-                var productString = Object.entries(item.core).map(function (v) {
-                  return v[0] + v[1];
-                }).join('~') + '~' + Object.entries(item.custom).map(function (v, i) {
-                  var customItemParamIndex = 10 > i ? '' + i : String.fromCharCode(65 + i - 10);
-                  return "k".concat(customItemParamIndex).concat(v[0], "~v").concat(customItemParamIndex).concat(v[1]);
-                }).join('~');
-                payload["pr".concat(i + 1)] = productString;
-              })();
+              var item = {
+                core: {},
+                custom: {}
+              };
+              Object.entries(items[i]).forEach(function (pair) {
+                if (ga4Schema[pair[0]]) {
+                  if (typeof pair[1] !== 'undefined') item.core[ga4Schema[pair[0]]] = pair[1];
+                } else item.custom[pair[0]] = pair[1];
+              });
+              var productString = Object.entries(item.core).map(function (v) {
+                return v[0] + v[1];
+              }).join('~') + '~' + Object.entries(item.custom).map(function (v, i) {
+                var customItemParamIndex = 10 > i ? '' + i : String.fromCharCode(65 + i - 10);
+                return "k".concat(customItemParamIndex).concat(v[0], "~v").concat(customItemParamIndex).concat(v[1]);
+              }).join('~');
+              payload["pr".concat(i + 1)] = productString;
             }
+          };
+          for (var i = 0; i < items.length; i++) {
+            _loop();
           }
         } else {
           if (ga4Schema[key]) {
@@ -441,7 +446,7 @@ var ga4mp = (function () {
       var eventParameters = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
       var forceDispatch = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
       // We want to wait for the CH Promise to fullfill
-      clientHints().then(function (ch) {
+      clientHints(internalModel === null || internalModel === void 0 ? void 0 : internalModel.mode).then(function (ch) {
         if (ch) {
           internalModel.payloadData = _extends(internalModel.payloadData, ch);
         }

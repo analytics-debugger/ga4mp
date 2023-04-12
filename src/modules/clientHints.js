@@ -1,4 +1,9 @@
-const clientHints = () => {
+const clientHints = () => { 
+    if(window && !('navigator' in window)) {
+        return new Promise((resolve) => {
+            resolve(null)
+        })        
+    }
     if (!navigator?.userAgentData?.getHighEntropyValues)
         return new Promise((resolve) => {
             resolve(null)
@@ -19,7 +24,7 @@ const clientHints = () => {
                 _user_agent_architecture: d.architecture,
                 _user_agent_bitness: d.bitness,
                 _user_agent_full_version_list: encodeURIComponent(
-                    d.fullVersionList || navigator?.userAgentData?.brands
+                    (Object.values(d.fullVersionList) || navigator?.userAgentData?.brands)
                         .map((h) => {
                             return [h.brand, h.version].join(';')
                         })
