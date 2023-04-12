@@ -46,7 +46,6 @@ export const log = (message, data) => {
  * Populate Page Related Details
  */
 export const pageDetails = () => {
-    console.log('PAGE DETAIL')
     return {
         page_location: document.location.href,
         page_referrer: document.referrer,

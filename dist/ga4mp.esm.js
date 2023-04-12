@@ -164,7 +164,6 @@ const ecommerceEvents = [
 ];
 
 const sendRequest = (endpoint, payload, mode = 'browser', opts = {}) => {
-    console.log("DATA",payload );
     const qs = new URLSearchParams(
         JSON.parse(JSON.stringify(payload))
     ).toString();
@@ -196,7 +195,12 @@ const sendRequest = (endpoint, payload, mode = 'browser', opts = {}) => {
     }
 };
 
-const clientHints = () => {
+const clientHints = () => { 
+    if(window && !('navigator' in window)) {
+        return new Promise((resolve) => {
+            resolve(null);
+        })        
+    }
     if (!navigator?.userAgentData?.getHighEntropyValues)
         return new Promise((resolve) => {
             resolve(null);
@@ -217,7 +221,7 @@ const clientHints = () => {
                 _user_agent_architecture: d.architecture,
                 _user_agent_bitness: d.bitness,
                 _user_agent_full_version_list: encodeURIComponent(
-                    d.fullVersionList || navigator?.userAgentData?.brands
+                    (Object.values(d.fullVersionList) || navigator?.userAgentData?.brands)
                         .map((h) => {
                             return [h.brand, h.version].join(';')
                         })
@@ -251,7 +255,7 @@ const pageDetails = () => {
     }
 };
 
-const version = '0.0.1-alpha.3';
+const version = '0.0.4';
 
 /**
  * Main Class Function
@@ -497,7 +501,7 @@ const ga4mp = function (measurement_ids, config = {}) {
         forceDispatch = true
     ) => {
         // We want to wait for the CH Promise to fullfill
-        clientHints().then((ch) => {            
+        clientHints(internalModel?.mode).then((ch) => {            
             if (ch) {                
                 internalModel.payloadData = Object.assign(
                     internalModel.payloadData,
