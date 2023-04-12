@@ -1,5 +1,5 @@
-const clientHints = (mode) => { 
-    if(mode!=="browser") {
+const clientHints = () => { 
+    if(window && !('navigator' in window)) {
         return new Promise((resolve) => {
             resolve(null)
         })        
