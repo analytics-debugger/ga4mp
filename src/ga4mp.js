@@ -13,7 +13,7 @@ import { sendRequest } from './modules/request'
 import clientHints from './modules/clientHints'
 import pageDetails from './modules/pageInfo'
 
-const version = '0.0.1-alpha.3'
+const version = '0.0.4'
 
 /**
  * Main Class Function
