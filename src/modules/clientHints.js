@@ -1,4 +1,9 @@
-const clientHints = () => {
+const clientHints = (mode) => { 
+    if(mode!=="browser") {
+        return new Promise((resolve) => {
+            resolve(null)
+        })        
+    }
     if (!navigator?.userAgentData?.getHighEntropyValues)
         return new Promise((resolve) => {
             resolve(null)

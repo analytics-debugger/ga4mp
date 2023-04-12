@@ -259,7 +259,7 @@ const ga4mp = function (measurement_ids, config = {}) {
         forceDispatch = true
     ) => {
         // We want to wait for the CH Promise to fullfill
-        clientHints().then((ch) => {            
+        clientHints(internalModel?.mode).then((ch) => {            
             if (ch) {                
                 internalModel.payloadData = Object.assign(
                     internalModel.payloadData,
