@@ -1,5 +1,4 @@
 export const sendRequest = (endpoint, payload, mode = 'browser', opts = {}) => {
-    console.log("DATA",payload )
     const qs = new URLSearchParams(
         JSON.parse(JSON.stringify(payload))
     ).toString()
