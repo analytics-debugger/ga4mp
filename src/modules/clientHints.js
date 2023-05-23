@@ -1,5 +1,5 @@
-const clientHints = () => { 
-    if(window && !('navigator' in window)) {
+const clientHints = (mode) => { 
+    if (mode === 'node' || (window && !('navigator' in window))) {
         return new Promise((resolve) => {
             resolve(null)
         })        
