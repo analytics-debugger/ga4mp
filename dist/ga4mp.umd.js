@@ -1,6 +1,6 @@
 /*!
 * 
-*   @analytics-debugger/ga4mp 0.0.4
+*   @analytics-debugger/ga4mp 0.0.5
 *   https://github.com/analytics-debugger/ga4mp
 *
 *   Copyright (c) David Vallejo (https://www.thyngster.com).
@@ -189,7 +189,7 @@
         headers: {
           'User-Agent': opts.user_agent
         },
-        timeout: 1
+        timeout: 500
       };
       var request = req.get([endpoint, qs].join('?'), options, function (resp) {
         resp.on('data', function (chunk) {
@@ -206,9 +206,9 @@
     }
   };
 
-  var clientHints = function clientHints() {
+  var clientHints = function clientHints(mode) {
     var _navigator, _navigator$userAgentD;
-    if (window && !('navigator' in window)) {
+    if (mode === 'node' || typeof window === 'undefined' || typeof window !== 'undefined' && !('navigator' in window)) {
       return new Promise(function (resolve) {
         resolve(null);
       });
