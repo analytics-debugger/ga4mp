@@ -11,7 +11,7 @@ export const sendRequest = (endpoint, payload, mode = 'browser', opts = {}) => {
             headers: {
                 'User-Agent': opts.user_agent 
             },
-            timeout: 1,
+            timeout: 500,
         }        
         const request = req
             .get([endpoint, qs].join('?'), options, (resp) => {

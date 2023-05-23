@@ -176,7 +176,7 @@ const sendRequest = (endpoint, payload, mode = 'browser', opts = {}) => {
             headers: {
                 'User-Agent': opts.user_agent 
             },
-            timeout: 1,
+            timeout: 500,
         };        
         const request = req
             .get([endpoint, qs].join('?'), options, (resp) => {
@@ -195,8 +195,8 @@ const sendRequest = (endpoint, payload, mode = 'browser', opts = {}) => {
     }
 };
 
-const clientHints = () => { 
-    if(window && !('navigator' in window)) {
+const clientHints = (mode) => { 
+    if (mode === 'node' || typeof(window) === 'undefined' ||  typeof(window) !== 'undefined' && !('navigator' in window)) {
         return new Promise((resolve) => {
             resolve(null);
         })        
