@@ -1,6 +1,6 @@
 /*!
 * 
-*   @analytics-debugger/ga4mp 0.0.5
+*   @analytics-debugger/ga4mp 0.0.6
 *   https://github.com/analytics-debugger/ga4mp
 *
 *   Copyright (c) David Vallejo (https://www.thyngster.com).
@@ -126,10 +126,10 @@ define((function () { 'use strict';
     non_personalized_ads: '_npa',
     create_google_join: 'gaz',
     is_consent_update: 'gsu',
-    user_ip_address: 'uip',
+    user_ip_address: '_uip',
     google_consent_state: 'gcs',
     google_consent_update: 'gcu',
-    us_privacy_string: 'uip',
+    us_privacy_string: 'us_privacy',
     document_location: 'dl',
     document_path: 'dp',
     document_title: 'dt',
