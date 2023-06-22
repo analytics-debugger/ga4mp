@@ -1,6 +1,6 @@
 /*!
 * 
-*   @analytics-debugger/ga4mp 0.0.6
+*   @analytics-debugger/ga4mp 0.0.7
 *   https://github.com/analytics-debugger/ga4mp
 *
 *   Copyright (c) David Vallejo (https://www.thyngster.com).
@@ -180,7 +180,7 @@ define((function () { 'use strict';
       (_navigator = navigator) === null || _navigator === void 0 ? void 0 : _navigator.sendBeacon([endpoint, qs].join('?'));
     } else {
       var scheme = endpoint.split('://')[0];
-      var req = require(scheme);
+      var req = require("".concat(scheme));
       var options = {
         headers: {
           'User-Agent': opts.user_agent
