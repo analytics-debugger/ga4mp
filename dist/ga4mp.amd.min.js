@@ -1,6 +1,6 @@
 /*!
 * 
-*   @analytics-debugger/ga4mp 0.0.6
+*   @analytics-debugger/ga4mp 0.0.7
 *   https://github.com/analytics-debugger/ga4mp
 *
 *   Copyright (c) David Vallejo (https://www.thyngster.com).
