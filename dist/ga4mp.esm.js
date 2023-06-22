@@ -255,7 +255,7 @@ const pageDetails = () => {
     }
 };
 
-const version = '0.0.4';
+const version = '0.0.8';
 
 /**
  * Main Class Function
