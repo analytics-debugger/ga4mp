@@ -24,7 +24,7 @@ const clientHints = (mode) => {
                 _user_agent_architecture: d.architecture,
                 _user_agent_bitness: d.bitness,
                 _user_agent_full_version_list: encodeURIComponent(
-                    (Object.values(d.fullVersionList) || navigator?.userAgentData?.brands)
+                    (d.fullVersionList && Object.values(d.fullVersionList) || navigator?.userAgentData?.brands)
                         .map((h) => {
                             return [h.brand, h.version].join(';')
                         })
