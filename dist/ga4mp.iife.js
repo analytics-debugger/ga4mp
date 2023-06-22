@@ -181,7 +181,7 @@ var ga4mp = (function () {
       (_navigator = navigator) === null || _navigator === void 0 ? void 0 : _navigator.sendBeacon([endpoint, qs].join('?'));
     } else {
       var scheme = endpoint.split('://')[0];
-      var req = require(scheme);
+      var req = require("".concat(scheme));
       var options = {
         headers: {
           'User-Agent': opts.user_agent
