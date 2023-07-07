@@ -43,6 +43,7 @@ const ga4mp = function (measurement_ids, config = {}) {
                 beforeLoad: () => {},
                 beforeRequestSend: () => {},
             },
+            eventCallback: null,
             endpoint: 'https://www.google-analytics.com/g/collect',
             payloadData: {},
         },
@@ -134,6 +135,21 @@ const ga4mp = function (measurement_ids, config = {}) {
         value = sanitizeValue(value, 100)
         internalModel['persistentEventParameters'][key] = value
     }
+
+    /**
+     * Add an events callback, it will be triggered for every track function call
+     * @param {function} callback 
+     * @returns
+     */
+    const addEventCallback = (callback) => {
+        if (isFunction(callback)) {
+                internalModel.eventCallback = callback
+        } else {
+            console.error('callback is not a function')
+        }
+
+    }
+
 
     /**
      * setUserProperty
@@ -267,6 +283,17 @@ const ga4mp = function (measurement_ids, config = {}) {
                 )                
             }
             const payload = buildPayload(eventName, eventParameters, sessionControl)
+            // run callbacks here
+            
+                let callbackFn = internalModel.eventCallback;
+                if(callbackFn !== null) {
+                try {
+                callbackFn(internalModel.payloadData.user_id, eventName, eventParameters, internalModel.persistentEventParameters, internalModel.userProperties);
+                } catch(e) {
+                    console.error('callback failed: '+e)
+                }
+            }
+
             if (payload && forceDispatch) {
                 for (let i = 0; i < payload.tid.length; i++) {
                     let r = JSON.parse(JSON.stringify(payload))
@@ -294,6 +321,7 @@ const ga4mp = function (measurement_ids, config = {}) {
         setEventsParameter,
         setUserId,
         trackEvent,
+        addEventCallback,
     }
 }
 
