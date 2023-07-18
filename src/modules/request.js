@@ -1,7 +1,10 @@
 export const sendRequest = (endpoint, payload, mode = 'browser', opts = {}) => {
-    const qs = encodeURIComponent(new URLSearchParams(
+    let qs = new URLSearchParams(
         JSON.parse(JSON.stringify(payload))
-    ).toString())
+    ).toString()
+    if (opts.encode_search_params) {
+        qs = encodeURIComponent(qs)
+    }
     if (mode === 'browser') {
         navigator?.sendBeacon([endpoint, qs].join('?'))
     } else {
