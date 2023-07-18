@@ -4,9 +4,8 @@ export const sendRequest = (endpoint, payload, mode = 'browser', opts = {}) => {
     if (opts.encode_search_params) {
         // Ensure spaces are not replaced with +
         qs = Object.entries(payloadParsed)
-            .map(([key, value]) => `${key}=${value}`)
+            .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
             .join('&')
-        qs = encodeURIComponent(qs)
     } else {
         qs = new URLSearchParams(
             payloadParsed
