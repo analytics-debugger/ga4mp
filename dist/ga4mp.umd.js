@@ -1,6 +1,6 @@
 /*!
 * 
-*   @analytics-debugger/ga4mp 0.0.8
+*   @analytics-debugger/ga4mp 1.0.0
 *   https://github.com/analytics-debugger/ga4mp
 *
 *   Copyright (c) David Vallejo (https://www.thyngster.com).
@@ -16,18 +16,13 @@
 })(this, (function () { 'use strict';
 
   function _extends() {
-    _extends = Object.assign ? Object.assign.bind() : function (target) {
-      for (var i = 1; i < arguments.length; i++) {
-        var source = arguments[i];
-        for (var key in source) {
-          if (Object.prototype.hasOwnProperty.call(source, key)) {
-            target[key] = source[key];
-          }
-        }
+    return _extends = Object.assign ? Object.assign.bind() : function (n) {
+      for (var e = 1; e < arguments.length; e++) {
+        var t = arguments[e];
+        for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
       }
-      return target;
-    };
-    return _extends.apply(this, arguments);
+      return n;
+    }, _extends.apply(null, arguments);
   }
 
   var trim = function trim(str, chars) {
@@ -181,7 +176,7 @@
     var qs = new URLSearchParams(JSON.parse(JSON.stringify(payload))).toString();
     if (mode === 'browser') {
       var _navigator;
-      (_navigator = navigator) === null || _navigator === void 0 ? void 0 : _navigator.sendBeacon([endpoint, qs].join('?'));
+      (_navigator = navigator) === null || _navigator === void 0 || _navigator.sendBeacon([endpoint, qs].join('?'));
     } else {
       var scheme = endpoint.split('://')[0];
       var req = require("".concat(scheme));
@@ -207,26 +202,26 @@
   };
 
   var clientHints = function clientHints(mode) {
-    var _navigator, _navigator$userAgentD;
+    var _navigator;
     if (mode === 'node' || typeof window === 'undefined' || typeof window !== 'undefined' && !('navigator' in window)) {
       return new Promise(function (resolve) {
         resolve(null);
       });
     }
-    if (!((_navigator = navigator) !== null && _navigator !== void 0 && (_navigator$userAgentD = _navigator.userAgentData) !== null && _navigator$userAgentD !== void 0 && _navigator$userAgentD.getHighEntropyValues)) return new Promise(function (resolve) {
+    if (!((_navigator = navigator) !== null && _navigator !== void 0 && (_navigator = _navigator.userAgentData) !== null && _navigator !== void 0 && _navigator.getHighEntropyValues)) return new Promise(function (resolve) {
       resolve(null);
     });
     return navigator.userAgentData.getHighEntropyValues(['platform', 'platformVersion', 'architecture', 'model', 'uaFullVersion', 'bitness', 'fullVersionList', 'wow64']).then(function (d) {
-      var _navigator2, _navigator2$userAgent, _navigator3, _navigator3$userAgent, _navigator4, _navigator4$userAgent;
+      var _navigator2, _navigator3, _navigator4;
       return {
         _user_agent_architecture: d.architecture,
         _user_agent_bitness: d.bitness,
-        _user_agent_full_version_list: encodeURIComponent((Object.values(d.fullVersionList) || ((_navigator2 = navigator) === null || _navigator2 === void 0 ? void 0 : (_navigator2$userAgent = _navigator2.userAgentData) === null || _navigator2$userAgent === void 0 ? void 0 : _navigator2$userAgent.brands)).map(function (h) {
+        _user_agent_full_version_list: encodeURIComponent((Object.values(d.fullVersionList) || ((_navigator2 = navigator) === null || _navigator2 === void 0 || (_navigator2 = _navigator2.userAgentData) === null || _navigator2 === void 0 ? void 0 : _navigator2.brands)).map(function (h) {
           return [h.brand, h.version].join(';');
         }).join('|')),
         _user_agent_mobile: d.mobile ? 1 : 0,
-        _user_agent_model: d.model || ((_navigator3 = navigator) === null || _navigator3 === void 0 ? void 0 : (_navigator3$userAgent = _navigator3.userAgentData) === null || _navigator3$userAgent === void 0 ? void 0 : _navigator3$userAgent.mobile),
-        _user_agent_platform: d.platform || ((_navigator4 = navigator) === null || _navigator4 === void 0 ? void 0 : (_navigator4$userAgent = _navigator4.userAgentData) === null || _navigator4$userAgent === void 0 ? void 0 : _navigator4$userAgent.platform),
+        _user_agent_model: d.model || ((_navigator3 = navigator) === null || _navigator3 === void 0 || (_navigator3 = _navigator3.userAgentData) === null || _navigator3 === void 0 ? void 0 : _navigator3.mobile),
+        _user_agent_platform: d.platform || ((_navigator4 = navigator) === null || _navigator4 === void 0 || (_navigator4 = _navigator4.userAgentData) === null || _navigator4 === void 0 ? void 0 : _navigator4.platform),
         _user_agent_platform_version: d.platformVersion,
         _user_agent_wow64: d.wow64 ? 1 : 0
       };
