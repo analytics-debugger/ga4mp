@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 CLAUDE.*
 .claude
+dist
